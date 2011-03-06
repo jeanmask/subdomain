@@ -25,7 +25,7 @@ class Route extends Kohana_Route {
 	/**
 	 * @var  string  route SUBDOMAIN
 	 */
-	protected $_subdomain = '';
+	protected $_subdomain;
 	
 	public function __construct($uri = NULL, $regex = NULL, $subdomain = NULL) {
 		if(!empty($subdomain)) {

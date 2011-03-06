@@ -33,11 +33,13 @@ class Request extends Kohana_Request {
 	/**
 	 * @var  string  request Subdomain
 	 */
-	protected $_subdomain = '';
+	protected $_subdomain;
 	
 	public function __construct($uri, Cache $cache = NULL) {
 		parent::__construct($uri, $cache);
 		
-		$this->_subdomain = Request::detect_subdomain();
+		if(!Kohana::$is_cli) {
+			$this->_subdomain = Request::detect_subdomain();
+		}
 	}
 }
