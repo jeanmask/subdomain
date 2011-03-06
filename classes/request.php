@@ -12,7 +12,7 @@ class Request extends Kohana_Request {
 			self::$subdomain = Request::detect_subdomain();
 		}
 		
-		return parent::factory($uri,$cache);
+		return parent::factory($uri, $cache);
 	}
 	
 	public static function detect_subdomain($base = NULL, $host = NULL) {
@@ -24,7 +24,7 @@ class Request extends Kohana_Request {
 			$host = $_SERVER['HTTP_HOST'];
 		}
 		
-		if(empty($base) || preg_match('/^(localhost|test|example|invalid)$/',$host) || Valid::ip($host)) {
+		if(empty($base) || in_array($host, Route::$localhosts) || Valid::ip($host)) {
 			return FALSE;
 		}
 		
@@ -38,42 +38,6 @@ class Request extends Kohana_Request {
 			}
 		}
 		
-		return FALSE;
-	}	
-	
-	/**
-	 * Process URI
-	 *
-	 * @param   string  $uri     URI
-	 * @param   array   $routes  Route
-	 * @return  array
-	 */
-	public static function process_uri($uri, $routes = NULL, $subdomain = NULL)
-	{
-		// Load routes
-		$routes = ($routes === NULL) ? Route::all() : $routes;
-		$params = NULL;
-		$subdomain = ($subdomain === NULL) ? Request::$subdomain : $subdomain;
-		
-		foreach ($routes as $name => $route)
-		{
-			// We found something suitable
-			if ($params = $route->matches($uri, $subdomain))
-			{
-				if ( ! isset($params['uri']))
-				{
-					$params['uri'] = $uri;
-				}
-
-				if ( ! isset($params['route']))
-				{
-					$params['route'] = $route;
-				}
-
-				break;
-			}
-		}
-
-		return $params;
-	}	
+		return '';
+	}
 }

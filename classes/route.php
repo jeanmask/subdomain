@@ -2,6 +2,8 @@
 
 class Route extends Kohana_Route {
 
+	public static $default_subdomains = array('');
+
 	/**
 	 * Stores a named route and returns it. The "action" will always be set to
 	 * "index" if it is not defined.
@@ -19,6 +21,10 @@ class Route extends Kohana_Route {
 	 */
 	public static function set($name, $uri_callback = NULL, $regex = NULL, array $subdomain = NULL)
 	{
+		if($subdomain === NULL) {
+			$subdomain = self::$default_subdomains;
+		}
+		
 		return Route::$_routes[$name] = new Route($uri_callback, $regex, $subdomain);
 	}
 
@@ -36,8 +42,13 @@ class Route extends Kohana_Route {
 	}
 	
 	public function matches($uri, $subdomain = NULL) {
+		$subdomain = ($subdomain === NULL) ? Request::$subdomain : $subdomain;
 		
-		if($this->_subdomain === NULL || in_array($subdomain, $this->_subdomain)) {
+		if($subdomain === FALSE) {
+			$subdomain = '';
+		}
+		
+		if(in_array('*', $this->_subdomain) || in_array($subdomain, $this->_subdomain)) {
 			return parent::matches($uri);
 		}
 		
