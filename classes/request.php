@@ -13,7 +13,7 @@ class Request extends Kohana_Request {
 			$host = $_SERVER['HTTP_HOST'];
 		}
 		
-		if(preg_match('/^(localhost|test|example|invalid)/',$host)) {
+		if(empty($base) || preg_match('/^(localhost|test|example|invalid)/',$host) || Valid::ip($host)) {
 			return self::$default_subdomain;
 		}
 		
