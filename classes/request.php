@@ -8,9 +8,7 @@ class Request extends Kohana_Request {
 	public static $subdomain;
 	
 	public static function factory($uri = TRUE, Cache $cache = NULL)	{
-		if(!Kohana::$is_cli) {
-			self::$subdomain = Request::detect_subdomain();
-		}
+		self::$subdomain = Request::detect_subdomain();
 		
 		return parent::factory($uri, $cache);
 	}
@@ -21,10 +19,14 @@ class Request extends Kohana_Request {
 		}
 		
 		if($host === NULL) {
+			if( Kohana::$is_cli ) {
+				return FALSE;
+			}
+			
 			$host = $_SERVER['HTTP_HOST'];
 		}
 		
-		if(empty($base) || in_array($host, Route::$localhosts) || Valid::ip($host)) {
+		if(empty($base) || empty($host) || in_array($host, Route::$localhosts) || Valid::ip($host)) {
 			return FALSE;
 		}
 		
