@@ -14,10 +14,10 @@ class Route extends Kohana_Route {
 	 * @param   string   route name
 	 * @param   string   URI pattern
 	 * @param   array    regex patterns for route keys
-	 * @param   string   name of subdomain to apply route rule ( NULL = default, '*' = apply to all subdomains, 'other_string' = unique subdmain to apply )
+	 * @param   array    name of subdomain to apply route rule ( NULL = apply to all subdomains, 'other_string' = unique subdmain to apply )
 	 * @return  Route
 	 */
-	public static function set($name, $uri_callback = NULL, $regex = NULL, $subdomain = NULL)
+	public static function set($name, $uri_callback = NULL, $regex = NULL, array $subdomain = NULL)
 	{
 		return Route::$_routes[$name] = new Route($uri_callback, $regex, $subdomain);
 	}
@@ -27,11 +27,20 @@ class Route extends Kohana_Route {
 	 */
 	protected $_subdomain;
 	
-	public function __construct($uri = NULL, $regex = NULL, $subdomain = NULL) {
-		if(!empty($subdomain)) {
+	public function __construct($uri = NULL, $regex = NULL, array $subdomain = NULL) {
+		parent::__construct($uri,$regex);
+		
+		if($subdomain !== NULL) {
 			$this->_subdomain = $subdomain;
 		}
+	}
+	
+	public function matches($uri, $subdomain = NULL) {
 		
-		parent::__construct($uri,$regex);
+		if($this->_subdomain === NULL || in_array($subdomain, $this->_subdomain)) {
+			return parent::matches($uri);
+		}
+		
+		return FALSE;
 	}
 }
