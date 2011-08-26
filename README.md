@@ -1,4 +1,4 @@
-Subdomain Module for Kohana 3.1.x
+Subdomain Module for Kohana 3.2.x
 ===================================
 
 This module implements ability to catch subdomains on class "Request" and set routes specifically by sub-domain.
