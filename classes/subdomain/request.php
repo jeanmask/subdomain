@@ -7,10 +7,10 @@ class Subdomain_Request extends Kohana_Request {
 	 */
 	public static $subdomain;
 	
-	public static function factory($uri = TRUE, Cache $cache = NULL)	{
-		self::$subdomain = Request::detect_subdomain();
 		
-		return parent::factory($uri, $cache);
+	public static function factory($uri = TRUE, HTTP_Cache $cache = NULL, $injected_routes = array())	{
+		self::$subdomain = Request::detect_subdomain();
+		return parent::factory($uri, $cache, $injected_routes);
 	}
 	
 	public static function detect_subdomain($base = NULL, $host = NULL) {
