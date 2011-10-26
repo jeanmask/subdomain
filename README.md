@@ -19,12 +19,12 @@ This module implements ability to catch subdomains on class "Request" and set ro
 	
 **Set defaults subdomains to routes. Ex:**
 
-	// Default value is array(''); '' = if not having subdomain
+	// Default value is array(Route::SUBDOMAIN_EMPTY, 'www'); Route::SUBDOMAIN_EMPTY = if not having subdomain
 	Routes::$default_subdomains = array('','www');
 	
 **Set Route to default subdomain. Ex:**
 
-	// if only use address "test.your-domain.com", this route is valid.
+	// if use address "your-domain.com" or "www.your-domain.com", this route is valid.
 	Route::set('subdomain', '(<controller>(/<action>(/<id>)))')
 		->defaults(array(
 			'controller' => 'welcome',
@@ -33,8 +33,9 @@ This module implements ability to catch subdomains on class "Request" and set ro
 
 **Set Route by specifically subdomain. Ex:**
 
-	// if only use address "test.your-domain.com", this route is valid.
-	Route::set('subdomain', '(<controller>(/<action>(/<id>)))', NULL, array('test'))
+	// if use address "test.your-domain.com", this route is valid.
+	Route::set('subdomain', '(<controller>(/<action>(/<id>)))')
+        ->subdomains(array('test'))
 		->defaults(array(
 			'controller' => 'test',
 			'action'     => 'index',
@@ -43,7 +44,8 @@ This module implements ability to catch subdomains on class "Request" and set ro
 **Set Route for all subdomains (wildcard). Ex:**
 
 	// you can use any sub-domain to execute this route.
-	Route::set('subdomain', '(<controller>(/<action>(/<id>)))', NULL, array('*'))
+	Route::set('subdomain', '(<controller>(/<action>(/<id>)))')
+        ->subdomains(array(Route::SUBDOMAIN_WILDCARD))
 		->defaults(array(
 			'controller' => 'test',
 			'action'     => 'wildcard',
@@ -167,7 +169,7 @@ This module implements ability to catch subdomains on class "Request" and set ro
 	 * defaults for the URI.
 	 */
 	 
-	Route::$default_subdomains = array('','www');
+	Route::$default_subdomains = array(Route::SUBDOMAIN_EMPTY, 'www');
 
 	Route::set('default', '(<controller>(/<action>(/<id>)))')
 		->defaults(array(
@@ -175,13 +177,15 @@ This module implements ability to catch subdomains on class "Request" and set ro
 			'action'     => 'index',
 		));
 	 
-	Route::set('subdomain1', '(<controller>(/<action>(/<id>)))', NULL, array('test','test2'))
+	Route::set('subdomain1', '(<controller>(/<action>(/<id>)))')
+        ->subdomains(array('test','test2'))
 		->defaults(array(
 			'controller' => 'test',
 			'action'     => 'index',
 		));
 		
-	Route::set('subdomain2', '(<controller>(/<action>(/<id>)))', NULL, array('*'))
+	Route::set('subdomain2', '(<controller>(/<action>(/<id>)))')
+        ->subdomains(array(Route::SUBDOMAIN_WILDCARD))
 		->defaults(array(
 			'controller' => 'test',
 			'action'     => 'wildcard',
