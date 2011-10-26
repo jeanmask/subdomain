@@ -2,54 +2,50 @@
 
 class Subdomain_Route extends Kohana_Route {
 
-	public static $default_subdomains = array('');
+    const SUBDOMAIN_WILDCARD = '*', SUBDOMAIN_EMPTY = '' ;
 
-	/**
-	 * Stores a named route and returns it. The "action" will always be set to
-	 * "index" if it is not defined.
-	 *
-	 *     Route::set('default', '(<controller>(/<action>(/<id>)))')
-	 *         ->defaults(array(
-	 *             'controller' => 'welcome',
-	 *         ));
-	 *
-	 * @param   string   route name
-	 * @param   string   URI pattern
-	 * @param   array    regex patterns for route keys
-	 * @param   array    name of subdomain to apply route rule ( NULL = apply to all subdomains, 'other_string' = unique subdmain to apply )
-	 * @return  Route
-	 */
-	public static function set($name, $uri_callback = NULL, $regex = NULL, array $subdomain = NULL)
-	{
-		if($subdomain === NULL) {
-			$subdomain = self::$default_subdomains;
-		}
-		
-		return Route::$_routes[$name] = new Route($uri_callback, $regex, $subdomain);
-	}
+	public static $default_subdomains = array( self::SUBDOMAIN_EMPTY, 'www' ) ;
 
 	/**
 	 * @var  string  route SUBDOMAIN
 	 */
-	protected $_subdomain;
+	protected $_subdomain ;
 	
-	public function __construct($uri = NULL, $regex = NULL, array $subdomain = NULL) {
-		parent::__construct($uri,$regex);
+	public function __construct($uri = NULL, $regex = NULL) {
+		parent::__construct($uri, $regex) ;
 		
-		if($subdomain !== NULL) {
-			$this->_subdomain = $subdomain;
-		}
+        // Set default subdomains in this route rule
+		$this->_subdomain = self::$default_subdomains ;
 	}
+
+
+    /**
+     * Set one or more subdomains to execute this route
+     *
+	 *     Route::set('default', '(<controller>(/<action>(/<id>)))')
+     *         ->subdomains(array(Route::SUBDOMAIN_EMPTY, 'www1', 'foo', 'bar'))
+	 *         ->defaults(array(
+	 *             'controller' => 'welcome',
+	 *         ));
+     *
+	 * @param   array    name(s) of subdomain(s) to apply in route
+     * @return Route
+     */      
+    public function subdomains(array $name) {
+        $this->_subdomain = $name ;
+
+        return $this ;
+    }
 	
 	public function matches($uri, $subdomain = NULL) {
-		$subdomain = ($subdomain === NULL) ? Request::$subdomain : $subdomain;
+		$subdomain = ($subdomain === NULL) ? Request::$subdomain : $subdomain ;
 		
 		if($subdomain === FALSE) {
-			$subdomain = '';
+			$subdomain = self::SUBDOMAIN_EMPTY ;
 		}
 		
-		if(in_array('*', $this->_subdomain) || in_array($subdomain, $this->_subdomain)) {
-			return parent::matches($uri);
+		if( in_array(self::SUBDOMAIN_WILDCARD, $this->_subdomain) || in_array($subdomain, $this->_subdomain) ) {
+			return parent::matches($uri) ;
 		}
 		
 		return FALSE;
