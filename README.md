@@ -8,7 +8,7 @@ This module implements ability to catch subdomains on class "Request" and set ro
 **Set base_url using absolute value in your bootstrap. Ex:**
 
 	Kohana::init(array(
-		'base_url'   => 'http://your_domain.com/app/',
+		'base_url'   => 'http://your_domain.com/',
 	));
 
 
