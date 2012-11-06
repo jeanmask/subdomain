@@ -37,15 +37,15 @@ class Subdomain_Route extends Kohana_Route {
         return $this ;
     }
 	
-	public function matches($uri, $subdomain = NULL) {
-		$subdomain = ($subdomain === NULL) ? Request::$subdomain : $subdomain ;
+	public function matches(Request $request){
+		$subdomain = (!isset($subdomain) || $subdomain === NULL) ? Request::$subdomain : $subdomain ;
 		
 		if($subdomain === FALSE) {
 			$subdomain = self::SUBDOMAIN_EMPTY ;
 		}
 		
 		if( in_array(self::SUBDOMAIN_WILDCARD, $this->_subdomain) || in_array($subdomain, $this->_subdomain) ) {
-			return parent::matches($uri) ;
+			return parent::matches($request) ;
 		}
 		
 		return FALSE;

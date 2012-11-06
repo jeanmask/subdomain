@@ -7,10 +7,10 @@ class Subdomain_Request extends Kohana_Request {
 	 */
 	public static $subdomain ;
 			
-	public static function factory($uri = TRUE, HTTP_Cache $cache = NULL, $injected_routes = array()) {
+	public static function factory($uri = TRUE, $client_params = array(), $allow_external = TRUE, $injected_routes = array()){
 		self::$subdomain = Request::catch_subdomain() ;
 
-		return parent::factory($uri, $cache, $injected_routes) ;
+		return parent::factory($uri, $client_params, $allow_external, $injected_routes) ;
 	}
 	
 	public static function catch_subdomain($base_url = NULL, $host = NULL) {
@@ -19,9 +19,9 @@ class Subdomain_Request extends Kohana_Request {
 		}
 		
 		if($host === NULL) {
-			if( Kohana::$is_cli ) {
-				return FALSE ;
-			}
+			// if( Kohana::$is_cli ) {
+			// 	return FALSE ;
+			// }
 			
 			$host = $_SERVER['HTTP_HOST'] ;
 		}
