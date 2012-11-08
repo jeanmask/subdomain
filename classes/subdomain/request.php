@@ -19,9 +19,9 @@ class Subdomain_Request extends Kohana_Request {
 		}
 		
 		if($host === NULL) {
-			// if( Kohana::$is_cli ) {
-			// 	return FALSE ;
-			// }
+			if( php_sapi_name() == 'cli' && empty($_SERVER['REMOTE_ADDR']) ) {
+				return FALSE ;
+			}
 			
 			$host = $_SERVER['HTTP_HOST'] ;
 		}
