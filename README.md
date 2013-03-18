@@ -191,6 +191,8 @@ This module implements ability to catch subdomains on class "Request" and set ro
 			'action'     => 'wildcard',
 		));	
 
-Sugestions? jean@webmais.net.br
+Sugestions? jean@pixeldev.com.br
 
-[]'s :)
+[]'s 
+
+:)
