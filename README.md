@@ -189,7 +189,7 @@ Route::set('subdomain2', '(<controller>(/<action>(/<id>)))')
 ));	
 ```
 
-Sugestions? jean@pixeldev.com.br
+Sugestions? misc@jean.bz
 
 []'s 
 
